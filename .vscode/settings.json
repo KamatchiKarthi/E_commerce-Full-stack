@@ -1,0 +1,6 @@
+{
+  "editor.foldingImportsByDefault": true,
+  "editor.codeActionsOnSave": {},
+  "typescript.updateImportsOnPaste.enabled": true,
+  "typescript.preferences.preferTypeOnlyAutoImports": true
+}
