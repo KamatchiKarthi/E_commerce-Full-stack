@@ -6,6 +6,9 @@ import { Toaster } from 'sonner';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
 import Profile from './Pages/pROFILE.JSX';
+import CollectionPage from './Pages/CollectionPage';
+import ProductDetails from './Components/Products/ProductDetails';
+import CheckOut from './Components/Cart/CheckOut';
 export default function App() {
   return (
     <BrowserRouter>
@@ -16,6 +19,9 @@ export default function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="collection/:collection" element={<CollectionPage />} />
+          <Route path='product/:id' element={<ProductDetails />} /> 
+          <Route path='checkout' element={<CheckOut/>} />
           {/* user layout */}
         </Route>
         <Route>{/* admin layout */}</Route>

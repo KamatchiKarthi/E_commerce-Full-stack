@@ -15,8 +15,9 @@ export default function Profile() {
             </button>
           </div>
           {/* right section */}
-          <div className="w-full md:w-2/3 lg:w-3/4"></div>
+          <div className="w-full md:w-2/3 lg:w-3/4">
           <MyordersPage />
+          </div>
         </div>
       </div>
     </div>

@@ -1,40 +1,40 @@
 import React, { useEffect, useState } from 'react';
-
+const mockOrders = [
+  {
+    _id: '12345',
+    createdAt: new Date(),
+    shippingAddress: { city: 'chennai', country: 'India' },
+    ordersItems: [
+      {
+        name: 'Product1',
+        images: 'https://picsum.photos/500/500?random=1',
+      },
+    ],
+    totalPrice: 100,
+    isPaid: true,
+  },
+  {
+    _id: '12355',
+    createdAt: new Date(),
+    shippingAddress: { city: 'chennai', country: 'India' },
+    ordersItems: [
+      {
+        name: 'Product2',
+        images: 'https://picsum.photos/500/500?random=22',
+      },
+    ],
+    totalPrice: 150,
+    isPaid: false,
+  },
+];
 export default function MyordersPage() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    setTimeout(() => {
-      const mockOrders = [
-        {
-          _id: '12345',
-          createdAt: new Date(),
-          shippingAddress: { city: 'chennai', country: 'India' },
-          ordersItems: [
-            {
-              name: 'Product1',
-              images: 'https://picsum.photos/500/500?random=1',
-            },
-          ],
-          totalPrice: 100,
-          isPaid: true,
-        },
-        {
-          _id: '12355',
-          createdAt: new Date(),
-          shippingAddress: { city: 'chennai', country: 'India' },
-          ordersItems: [
-            {
-              name: 'Product2',
-              images: 'https://picsum.photos/500/500?random=22',
-            },
-          ],
-          totalPrice: 150,
-          isPaid: true,
-        },
-      ];
+    const timer = setTimeout(() => {
       setOrders(mockOrders);
-    }, 1000);
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -53,6 +53,58 @@ export default function MyordersPage() {
               <th className="py-2 px-4 sm:py-3">status</th>
             </tr>
           </thead>
+          <tbody>
+            {orders.length > 0 ? (
+              orders.map(order => (
+                <tr
+                  key={order._id}
+                  className="hover:border-b border-gray-200 cursor-pointer"
+                >
+                  <td className="py-2 px-2 sm:py-4 sm:px-4">
+                    <img
+                      src={order.ordersItems[0].images}
+                      alt={order.ordersItems[0].name}
+                      className="w-10 h-10 sm:w-12 sm:h-1/2 object-cover rounded-lg"
+                    />
+                  </td>
+                  <td className="py-2 px-2 sm:py-4 font-medium text-gray-900 whitespace-nowrap">
+                    #{order._id}
+                  </td>
+                  <td className="py-2 px-2 sm:py-4 sm:px-4 ">
+                    {new Date(order.createdAt).toLocaleString()}
+                  </td>
+                  <td className="py-2 px-2 sm:py-4 sm:px-4">
+                    {order.shippingAddress
+                      ? `${order.shippingAddress.city},${order.shippingAddress.country}`
+                      : 'N/A'}{' '}
+                  </td>
+                  <td className="py-2 px-2 sm:py-4 sm:px-4">
+                    {order.ordersItems.length}
+                  </td>
+                  <td className="py-2 px-2 sm:py-4 sm:px-4">
+                    ${order.totalPrice}
+                  </td>
+                  <td className="py-2 px-2 sm:py-4 sm:px-4">
+                    <span
+                      className={`${
+                        order.isPaid
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-red-100 text-red-700'
+                      } px-2 py-1 rounded-full text-xs sm:text-sm font-medium`}
+                    >
+                      {order.isPaid ? 'isPaid' : 'Pending'}
+                    </span>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={7} className="py-4 px-4 text-center text-gray-500">
+                  You have no orders
+                </td>
+              </tr>
+            )}
+          </tbody>
         </table>
       </div>
     </div>
