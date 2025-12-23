@@ -9,6 +9,9 @@ import Profile from './Pages/pROFILE.JSX';
 import CollectionPage from './Pages/CollectionPage';
 import ProductDetails from './Components/Products/ProductDetails';
 import CheckOut from './Components/Cart/CheckOut';
+import OrderConfirmation from './Pages/OrderConfirmation';
+import OrderDetailsPage from './Pages/OrderDetailsPage';
+import MyordersPage from './Pages/MyordersPage';
 export default function App() {
   return (
     <BrowserRouter>
@@ -20,8 +23,11 @@ export default function App() {
           <Route path="register" element={<Register />} />
           <Route path="profile" element={<Profile />} />
           <Route path="collection/:collection" element={<CollectionPage />} />
-          <Route path='product/:id' element={<ProductDetails />} /> 
-          <Route path='checkout' element={<CheckOut/>} />
+          <Route path="product/:id" element={<ProductDetails />} />
+          <Route path="checkout" element={<CheckOut />} />
+          <Route path="order-confirmation" element={<OrderConfirmation />} />
+          <Route path="order/:id" element={<OrderDetailsPage />} />
+          <Route path="/my-orders" element={<MyordersPage />} />
           {/* user layout */}
         </Route>
         <Route>{/* admin layout */}</Route>
