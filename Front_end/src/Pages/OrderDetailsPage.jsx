@@ -114,7 +114,7 @@ export default function OrderDetailsPage() {
                         {item.name}
                       </Link>
                     </td>
-                    <td className="py-2 px-4">${item.price}</td>{' '}
+                    <td className="py-2 px-4">${item.price}</td>
                     <td className="py-2 px-4">${item.quantity}</td>
                     <td className="py-2 px-4">${item.price * item.quantity}</td>
                   </tr>
@@ -124,7 +124,9 @@ export default function OrderDetailsPage() {
           </div>
           {/* back to orders link */}
 
-          <Link to="/my-orders" className="text-blue-500 hover:underline">Back to My orders</Link>
+          <Link to="/my-orders" className="text-blue-500 hover:underline">
+            Back to My orders
+          </Link>
         </div>
       )}
     </div>
