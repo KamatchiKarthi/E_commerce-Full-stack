@@ -1,14 +1,14 @@
 const express = require("express");
 const User = require("../models/User.js");
 const jwt = require("jsonwebtoken");
-
+const { protect } = require("../middleware/authMiddleware.js");
 const router = express.Router();
 
 //route post /api/users/register
 // @desc register new user,
 // @access Public
 router.post("/register", async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password,role } = req.body;
 
   try {
     let user = await User.findOne({ email });
@@ -17,7 +17,7 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({
         message: "User already exists",
       });
-    user = new User({ name, email, password });
+    user = new User({ name, email, password,role });
     await user.save();
 
     // CREATE JWT PAYLOAD
@@ -64,12 +64,15 @@ router.post("/login", async (req, res) => {
         message: "account not exits",
       });
     }
-    const isMatch = await User.matchPassword(password);
+    const isMatch = await user.matchPassword(password);
     if (!isMatch) {
       return res.status(400).json({
         message: "Invaild credentails",
       });
     }
+
+    // CREATE JWT PAYLOAD
+    const payload = { user: { id: user._id, role: user.role } };
     // sign and return the token along with user data
     jwt.sign(
       payload,
@@ -95,6 +98,14 @@ router.post("/login", async (req, res) => {
       message: "Server error",
     });
   }
+});
+
+// route GET api/users/profile
+//@desc get logged in user's profile(prodtect route)
+//access private
+
+router.get("/profile", protect, async (req, res) => {
+  res.json(req.user);
 });
 
 module.exports = router;
