@@ -57,7 +57,7 @@ router.put("/:id/pay", protect, async (req, res) => {
       checkout.paymentStatus = paymentStatus;
       checkout.paymentDetails = paymentDetils;
       checkout.paidAt = Date.now();
-      await checkOut.save();
+      await checkout.save();
       res.status(200).json(checkout);
     } else {
       res.status(400).json({ message: "Invaild Payment Status" });
@@ -72,6 +72,7 @@ router.put("/:id/pay", protect, async (req, res) => {
 // desc finalize checkout and convert to an order after payment confirmatin
 // access private,
 router.post("/:id/finalize", protect, async (req, res) => {
+ 
   try {
     const checkout = await Checkout.findById(req.params.id);
     if (!checkout) {
@@ -80,9 +81,9 @@ router.post("/:id/finalize", protect, async (req, res) => {
 
     if (checkout.isPaid && !checkout.isFinalized) {
       // CREATE final order based on the checkout details
-      const finalOrder = await Orer.create({
+      const finalOrder = await Order.create({
         user: checkout.user,
-        orderItems: checkout.orderItems,
+        orderItems: checkout.checkoutItems,
         shippingAddress: checkout.shippingAddress,
         paymentMethod: checkout.paymentMethod,
         totalPrice: checkout.totalPrice,
@@ -92,13 +93,13 @@ router.post("/:id/finalize", protect, async (req, res) => {
         paymentStatus: "paid",
         paymentDetails: checkout.paymentDetails,
       });
-
+      
       //MARK the checkout as finalized
       (checkout.isFinalized = true),
         (checkout.finalizedAt = Date.now()),
         await checkout.save();
       //delete the cart associated with the user
-      await Cart.findOneAndDelete({ user: chekout.user });
+      await Cart.findOneAndDelete({ user: checkout.user });
       res.status(201).json(finalOrder);
     } else if (checkout.isFinalized) {
       res.status(400).json({ message: "Checkout already finalized" });
@@ -109,6 +110,7 @@ router.post("/:id/finalize", protect, async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+
     res.status(500).json({
       message: "server error",
     });

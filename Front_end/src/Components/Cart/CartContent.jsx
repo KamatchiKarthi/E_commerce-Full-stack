@@ -1,31 +1,37 @@
 import React from 'react';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
+import { useDispatch } from 'react-redux';
+import {
+  removeFromCart,
+  updateCartItemQuantity,
+} from '../../redux/slices/cartSlice';
 
-export default function CartContent() {
-  const cartproduct = [
-    {
-      productId: 1,
-      name: 'T-Shirt',
-      size: 'M',
-      color: 'red',
-      quantity: 1,
-      price: 15,
-      image: 'https://picsum.photos/200?random=1',
-    },
-    {
-      productId: 2,
-      name: 'Jeans',
-      size: 'M',
-      color: 'blue',
-      quantity: 1,
-      price: 25,
-      image: 'https://picsum.photos/200?random=2',
-    },
-  ];
+export default function CartContent({ cart, userId, guestId }) {
+  const dispatch = useDispatch();
 
+  //handle adding or substracting to cart
+  const handleAddTocart = (productId, delta, quantity, size, color) => {
+    const newQuantity =  quantity + delta;
+    if (newQuantity >= 1) {
+      dispatch(
+        updateCartItemQuantity({
+          productId,
+          quantity: newQuantity,
+          guestId,
+          userId,
+          size,
+          color,
+        })
+      );
+    }
+  };
+
+  const handleRemoveFromCart = (productId, size, color) => {
+    dispatch(removeFromCart({ productId, guestId, userId, size, color }));
+  };
   return (
     <div>
-      {cartproduct.map((product, ind) => (
+      {cart.products.map((product, ind) => (
         <div
           key={ind}
           className="flex items-start justify-between py-4 border-b"
@@ -42,11 +48,33 @@ export default function CartContent() {
                 size : {product.size} | color : {product.color}
               </p>
               <div className="flex items-center mt-2">
-                <button className="border rounded px-2 py-1 text-xl font-medium">
+                <button
+                  onClick={() =>
+                    handleAddTocart(
+                      product.productId,
+                      -1,
+                      product.quantity,
+                      product.size,
+                      product.color
+                    )
+                  }
+                  className="border rounded px-2 py-1 text-xl font-medium"
+                >
                   -
                 </button>
-                <span className="mx-4 "> {product.quantity}</span>{' '}
-                <button className="border rounded px-2 py-1 text-xl font-medium">
+                <span className="mx-4 "> {product.quantity}</span>
+                <button
+                  onClick={() =>
+                    handleAddTocart(
+                      product.productId,
+                      +1,
+                      product.quantity,
+                      product.size,
+                      product.color
+                    )
+                  }
+                  className="border rounded px-2 py-1 text-xl font-medium"
+                >
                   +
                 </button>
               </div>
@@ -54,8 +82,16 @@ export default function CartContent() {
           </div>
           <div className="">
             <p>$ {product.price.toLocaleString()}</p>
-            <button>
-              <RiDeleteBin6Fill className="h-6 w-6 mt-2 text-gray-300" />
+            <button
+              onClick={() =>
+                handleRemoveFromCart(
+                  product.productId,
+                  product.size,
+                  product.color
+                )
+              }
+            >
+              <RiDeleteBin6Fill className="h-6 w-6 mt-2 text-red-500" />
             </button>
           </div>
         </div>

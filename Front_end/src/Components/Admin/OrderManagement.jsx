@@ -1,20 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
+import {
+  fetchAllOrders,
+  updateOrderStatus,
+} from '../../redux/slices/adminOrderSlice';
 
-const orders = [
-  {
-    _id: 12312,
-    user: {
-      name: 'john',
-    },
-    totalPrice: 110,
-    status: 'Processing',
-  },
-];
-
-const handleStatusChange = (orderId, status) => {
-  console.log({ id: orderId, status: status });
-};
 export default function OrderManagement() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user } = useSelector(state => state.auth);
+  const { orders, loading, error } = useSelector(state => state.adminOrders);
+
+  useEffect(() => {
+    if (!user || user.role !== 'admin') {
+      navigate('/');
+    } else {
+      dispatch(fetchAllOrders());
+    }
+  }, [dispatch, user, navigate]);
+
+  const handleStatusChange = (orderId, status) => {
+    dispatch(updateOrderStatus({ id: orderId, status }));
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error : {error}...</p>;
+
   return (
     <div className="max-w-7xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-6">Order Management</h2>
@@ -26,6 +39,7 @@ export default function OrderManagement() {
               <th className="px-4 py-2">User</th>
               <th className="px-4 py-2">Total</th>
               <th className="px-4 py-2">Status</th>
+              <th className="px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -38,7 +52,7 @@ export default function OrderManagement() {
                   <td className="py-4 px-4 font-medium text-gray-900">
                     #{order._id}
                   </td>
-                  <td className="p-4">{order.user.name}</td>
+                  <td className="p-4">{order.user?.name}</td>
                   <td className="p-4">${order.totalPrice}</td>
                   <td className="p-4">
                     <select

@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
         cart.products.push({
           productId,
           name: product.name,
-          images: product.images[0].url,
+          image: product.images[0].url,
           price: product.price,
           size,
           color,
@@ -63,7 +63,7 @@ router.post("/", async (req, res) => {
           {
             productId,
             name: product.name,
-            images: product.images[0].url,
+            image: product.images[0].url,
             price: product.price,
             size,
             color,
@@ -241,4 +241,3 @@ router.post("/merge", protect, async (req, res) => {
 });
 
 module.exports = router;
-

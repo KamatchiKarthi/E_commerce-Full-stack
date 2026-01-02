@@ -17,6 +17,7 @@ const orderItemSchema = new mongoose.Schema(
     },
     size: String,
     color: String,
+    image : String,
     quantity: {
       type: Number,
       required: true,
@@ -71,7 +72,7 @@ const orderSchema = new mongoose.Schema(
       default: "Processing",
     },
   },
-  { timeseries: true }
+  { timestamps: true }
 );
 
-module.expors = mongoose.model("order", orderSchema);
+module.exports = mongoose.model("order", orderSchema);

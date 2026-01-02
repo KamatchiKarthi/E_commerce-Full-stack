@@ -1,13 +1,32 @@
-import React, { useState } from 'react';
-const users = [
-  {
-    _id: 1254,
-    name: 'John Doe',
-    email: 'John@example.com',
-    role: 'admin',
-  },
-];
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
+import {
+  addUser,
+  deleteUser,
+  fetchUsers,
+  updaeUser,
+} from '../../redux/slices/adminSlice';
+
 export default function UserManagement() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user } = useSelector(state => state.auth);
+  const { users, loading, error } = useSelector(state => state.admin);
+
+  useEffect(() => {
+    if (user && user.role !== 'admin') {
+      navigate('/');
+    }
+  }, [user, navigate]);
+
+  useEffect(() => {
+    if (user && user.role === 'admin') {
+      dispatch(fetchUsers());
+    }
+  }, [dispatch, user]);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,12 +37,12 @@ export default function UserManagement() {
   const handleChange = e => {
     setFormData({
       ...formData,
-      [e.target.name]: [e.target.value],
+      [e.target.name]: e.target.value,
     });
   };
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(formData);
+    dispatch(addUser(formData));
     setFormData({
       name: '',
       email: '',
@@ -32,16 +51,18 @@ export default function UserManagement() {
     });
   };
   const handleRoleChange = (userId, newRole) => {
-    console.log({ id: userId, role: newRole });
+    dispatch(updaeUser({ id: userId, role: newRole }));
   };
   const handleDeleteUser = userId => {
     if (window.confirm('Are You sure want to delete this user?')) {
-      console.log('delerting user with id', userId);
+      dispatch(deleteUser(userId));
     }
   };
   return (
     <div className="max-w-7xl mx-auto p-6 ">
       <h2 className="text-2xl font-bold mb-4">User Managment</h2>
+      {loading && <p>Loading...</p>}
+      {error && <p>Error : {error}...</p>}
       {/* add new user form */}
       <div className="p-6 rounded-lg mb-6">
         <h3 className="text-lg font-bold mb-4">Add New User</h3>
@@ -114,17 +135,17 @@ export default function UserManagement() {
           <tbody>
             {users.map(user => (
               <tr
-                key={user._id}
+                key={user?._id}
                 className="border-b hover:bg-gray-50 border-b-gray-100"
               >
                 <td className="p-4 font-medium text-gray-900 whitespace-nowrap">
-                  {user.name}
+                  {user?.name}
                 </td>
-                <td className="p-4 ">{user.email}</td>
+                <td className="p-4 ">{user?.email}</td>
                 <td className="p-4 ">
                   <select
-                    value={user.role}
-                    onChange={e => handleRoleChange(user._id, e.target.value)}
+                    value={user?.role}
+                    onChange={e => handleRoleChange(user?._id, e.target.value)}
                     className="p-2 border rounded"
                   >
                     <option value="customer">Customer</option>

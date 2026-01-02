@@ -2,18 +2,27 @@ import React, { useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { HiMagnifyingGlass } from 'react-icons/hi2';
 import { HiMiniXMark } from 'react-icons/hi2';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
+import {
+  fetchProductsByFilters,
+  setFilters,
+} from '../../redux/slices/productSlice';
 
 export default function Searchbar() {
   const [searchterm, setSearchTerm] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleSearchToogle = () => {
     setIsOpen(!isOpen);
   };
 
   const handleSearch = e => {
     e.preventDefault();
-    console.log('search result',searchterm);
+    dispatch(setFilters({ search: searchterm }));
+    dispatch(fetchProductsByFilters({ search: searchterm }));
+    navigate(`/collection/all?search=${searchterm}`);
     setIsOpen(false);
     setSearchTerm('');
   };

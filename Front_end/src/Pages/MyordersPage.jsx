@@ -1,46 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-const mockOrders = [
-  {
-    _id: '12345',
-    createdAt: new Date(),
-    shippingAddress: { city: 'chennai', country: 'India' },
-    ordersItems: [
-      {
-        name: 'Product1',
-        images: 'https://picsum.photos/500/500?random=1',
-      },
-    ],
-    totalPrice: 100,
-    isPaid: true,
-  },
-  {
-    _id: '12355',
-    createdAt: new Date(),
-    shippingAddress: { city: 'chennai', country: 'India' },
-    ordersItems: [
-      {
-        name: 'Product2',
-        images: 'https://picsum.photos/500/500?random=22',
-      },
-    ],
-    totalPrice: 150,
-    isPaid: false,
-  },
-];
+import { fetchUserOrders } from '../redux/slices/orderSlice';
 export default function MyordersPage() {
-  const [orders, setOrders] = useState([]);
+  const dispatch = useDispatch();
+  const { orders, loading, error } = useSelector(state => state.orders);
   const navigate = useNavigate();
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setOrders(mockOrders);
-    }, 0);
-    return () => clearTimeout(timer);
-  }, []);
+    dispatch(fetchUserOrders());
+  }, [dispatch]);
 
   const handleRowClick = orderId => {
     navigate(`/order/${orderId}`);
   };
+
+  // console.log(orders.orders.orderItems[0].image)
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error : {error}</p>;
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6">
       <h2 className="text-xl sm:text-2xl font-bold mb-6">My Orders</h2>
@@ -67,8 +43,8 @@ export default function MyordersPage() {
                 >
                   <td className="py-2 px-2 sm:py-4 sm:px-4">
                     <img
-                      src={order.ordersItems[0].images}
-                      alt={order.ordersItems[0].name}
+                      src={order.orderItems[0]?.image}
+                      alt={order.orderItems[0]?.name || 'item'}
                       className="w-10 h-10 sm:w-12 sm:h-1/2 object-cover rounded-lg"
                     />
                   </td>
@@ -84,7 +60,7 @@ export default function MyordersPage() {
                       : 'N/A'}{' '}
                   </td>
                   <td className="py-2 px-2 sm:py-4 sm:px-4">
-                    {order.ordersItems.length}
+                    {order.orderItems.length}
                   </td>
                   <td className="py-2 px-2 sm:py-4 sm:px-4">
                     ${order.totalPrice}

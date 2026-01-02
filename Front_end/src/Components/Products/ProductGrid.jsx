@@ -1,15 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-export default function ProductGrid({ product }) {
+export default function ProductGrid({ products=[], loading, error }) {
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (error) {
+    return <p>Error: {error}</p>;
+   
+  }
+ 
+  console.log(products)
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-      {product.map((product,ind) => (
+<div>
+  {products.length <= 0 ? (<p className='text-center text-3xl'>No matching result</p>) : (    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      {products.map((product,ind) => (
         <Link key={ind} to={`/product/${product._id}`} className="block">
           <div className="bg-white p-4 rounded-lg">
             <div className="w-full h-96 mb-4">
               <img
-                src={product.Images[0].url}
+                src={product.images[0].url}
                 alt={product.name}
                 className="w-full h-full object-cover rounded-lg"
               />
@@ -21,6 +31,7 @@ export default function ProductGrid({ product }) {
           </div>
         </Link>
       ))}
-    </div>
+    </div>)  }
+</div>
   );
 }
