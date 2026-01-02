@@ -2,8 +2,8 @@
 *.logs
 
 #node modules
-frontend/node_modules
-backend/node_modules
+Front_end/node_modules
+Back_end/node_modules
 
 
 #eniveronment variable
