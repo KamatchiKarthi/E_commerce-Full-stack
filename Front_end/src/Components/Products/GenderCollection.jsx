@@ -18,7 +18,7 @@ export default function GenderCollection() {
           <div className="absolute bottom-8 left-8 bg-white/90 p-3">
           <h2 className='text-2xl font-bold text-gray-900 mb-3'>
             Women's Collection</h2>
-            <Link to='/Collection/all/gender=Women' className='text-gray-900 underline'>
+            <Link to='/collection/all?gender=Women' className='text-gray-900 underline'>
             Shop Now</Link>
             </div>
         </div>
@@ -32,7 +32,7 @@ export default function GenderCollection() {
           <div className="absolute bottom-8 left-8 bg-white/90 p-3">
           <h2 className='text-2xl font-bold text-gray-900 mb-3'>
             men's Collection</h2>
-            <Link to='/Collection/all/gender=men' className='text-gray-900 underline'>
+            <Link to='/collection/all?gender= Men' className='text-gray-900 underline'>
             Shop Now</Link>
             </div>
         </div>
