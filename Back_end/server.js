@@ -11,10 +11,14 @@ const OrderRoutes = require("./routes/orderRoutes");
 const uploadRoutes = require("./routes/upLoadRoutes");
 const subscribeRoutes = require("./routes/subscriberRoutes");
 const adminRoutes = require("./routes/adminRoutes");
-const productAdmin = require("./routes/productAdminRoutes")
-const orderAdmin = require("./routes/adminOrderRoutes")
+const productAdmin = require("./routes/productAdminRoutes");
+const orderAdmin = require("./routes/adminOrderRoutes");
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: FRONT_END_URL,
+  })
+);
 
 dotenv.config();
 
