@@ -5,7 +5,7 @@ import Home from './Pages/Home';
 import { Toaster } from 'sonner';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
-import Profile from './Pages/pROFILE.JSX';
+import Profile from './Pages/Profile';
 import CollectionPage from './Pages/CollectionPage';
 import ProductDetails from './Components/Products/ProductDetails';
 import CheckOut from './Components/Cart/CheckOut';
