@@ -16,7 +16,7 @@ const orderAdmin = require("./routes/adminOrderRoutes");
 app.use(express.json());
 app.use(
   cors({
-    origin: FRONT_END_URL,
+    origin: process.env.FRONT_END_URL,
   })
 );
 
